@@ -1,1 +1,2 @@
-# 01_CSharp_Fundamentals
+# C_Sharp_Fundamentals
+Hi everyone! 
