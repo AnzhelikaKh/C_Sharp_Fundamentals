@@ -2,14 +2,19 @@
 
 namespace _05_Homework
 {
-    public interface IDeveloper
+    public interface IDeveloper : IComparable
     {
         string Tool { get; set; }
         void Create();
         void Destroy();
+         int IComparable.CompareTo(object? obj)
+        {
+            IDeveloper? developer = obj as IDeveloper;
+            return string.Compare(this.Tool, developer?.Tool);
+        }
     }
 
-    public class Programmer : IDeveloper, IComparable
+    public class Programmer : IDeveloper
     {
         string language;
 
@@ -25,22 +30,14 @@ namespace _05_Homework
             Console.WriteLine($"Programmer destroys with {this.Tool}.");
         }
 
-        public int CompareTo(object? obj)
-        {
-            IDeveloper? developer = obj as IDeveloper;
-            return string.Compare( this.Tool, developer?.Tool);
-        }
+        
     }
-    public class Builder : IDeveloper, IComparable
+    public class Builder : IDeveloper
     {
         string tool;
         public string Tool { get { return tool; } set { tool = value; } }
 
-        public int CompareTo(object? obj)
-        {
-            IDeveloper? developer = obj as IDeveloper;
-            return string.Compare(this.Tool, developer?.Tool);
-        }
+        
 
         public void Create()
         {

@@ -17,7 +17,7 @@
             Console.WriteLine("------------------------------------------");
             Console.WriteLine("Please enter ID: ");
             uint FindNameID = uint.Parse(Console.ReadLine());
-            if (persons[FindNameID] != null) {
+            if (persons.ContainsKey(FindNameID)) {
                 Console.WriteLine($"Requested Name is: {persons[FindNameID]}");
             }
             else 
