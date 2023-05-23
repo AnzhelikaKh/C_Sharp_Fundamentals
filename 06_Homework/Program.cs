@@ -4,6 +4,7 @@ namespace _06_Homework
 {
     internal class Program
     {
+        public static int prevNum = 0;
         public static int Div(int a, int b)
         {
             return a / b;
@@ -12,13 +13,13 @@ namespace _06_Homework
         public static int ReadNumber(int start, int end)
         {
             int temp = int.Parse(Console.ReadLine());
-            if (temp >= start && temp <= end)
+            if (temp >= start && temp <= end && temp > prevNum)
             {
                 return temp;
             }
             else
             {
-                throw new Exception("Number is not in the range!");
+                throw new Exception("Number must be in the range [1...20] and number must be grater than previous");
             }
 
         }
@@ -54,11 +55,12 @@ namespace _06_Homework
 
                 for (int i = 0; i < 10; i++)
                 {
-                    numbers[i] = ReadNumber(start: 1, end: 20);
-                    if (i != 0 && numbers[i - 1] >= numbers[i])
+                    
+                    if (i != 0)
                     {
-                        throw new Exception("Number must be grater than previous!");
+                        prevNum = numbers[i - 1];
                     }
+                    numbers[i] = ReadNumber(start: 1, end: 20);
                 }
             }
             catch (Exception nex)
