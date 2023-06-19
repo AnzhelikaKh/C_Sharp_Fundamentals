@@ -1,0 +1,144 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp2
+{
+    public abstract class Shape : IComparable
+    {
+        public string name;
+        public string Name { get { return name; } set { this.name = value; } }
+        public Shape(string name)
+        {
+            this.name = name;
+        }
+        public abstract double Area();
+        public abstract double Perimeter();
+
+        public int CompareTo(object? obj)
+        {
+            Shape? shape = obj as Shape;
+            if (this.Area() > shape?.Area())
+            {
+                return 1;
+            }
+            else if (this.Area() < shape?.Area())
+            {
+                return -1;
+            }
+            else return 0;
+        }
+
+        public override string ToString()
+        {
+            return string.Format($"Shape name: {name}, Shape area: {Area()}, Shape Perimeter: {Perimeter()}"); ;
+        }
+    }
+
+    public class Circle : Shape
+    {
+        int radius;
+        public int Radius { get; set; }
+
+        public Circle(string name, int radius) : base(name)
+        {
+            this.radius = radius;
+        }
+
+        public override double Area()
+        {
+            return Math.PI * Math.Pow(radius, 2);
+        }
+
+        public override double Perimeter()
+        {
+            return 2 * Math.PI * radius;
+        }
+
+    }
+    public class Square : Shape
+    {
+        int side;
+        public int Side { get; set; }
+
+        public Square(string name, int side) : base(name)
+        {
+            this.side = side;
+        }
+
+        public override double Area()
+        {
+            return side * side;
+        }
+
+        public override double Perimeter()
+        {
+            return 4 * side;
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            List<Shape> shapes = new List<Shape>();
+            Console.WriteLine("Please enter 3 names and radiuses for Circles: ");
+            for (int i = 0; i < 3; i++)
+            {
+                string name = Console.ReadLine();
+                int radius = int.Parse(Console.ReadLine());
+                shapes.Add(new Circle(name, radius));
+            }
+
+            Console.WriteLine("Please enter 3 names and sides for Squares: ");
+            for (int i = 0; i < 3; i++)
+            {
+                string name = Console.ReadLine();
+                int side = int.Parse(Console.ReadLine());
+                shapes.Add(new Square(name, side));
+            }
+
+            foreach (Shape shape in shapes)
+            {
+                Console.WriteLine(shape);
+            }
+
+            var writePath = Path.GetFullPath("file.txt");
+            using (StreamWriter st = new StreamWriter(writePath, false, System.Text.Encoding.Default))
+            {
+                st.WriteLine("Shapes with area from range [10,100]: ");
+
+                var selectedShapes = shapes.Where(s => s.Area() >= 10 && s.Area() <= 100);
+                foreach (var shape in selectedShapes)
+                {
+                    st.WriteLine(shape);
+                }
+            }
+            Console.WriteLine("Shapes with area from range [10,100] are written to the file.txt.");
+
+
+            using (StreamWriter st = new StreamWriter(writePath, true, System.Text.Encoding.Default))
+            {
+                st.WriteLine("Shapes with letter 'a' in the name: ");
+
+                var selectedShapes = shapes.Where(s => s.Name.Contains('a'));
+                foreach (var shape in selectedShapes)
+                {
+                    st.WriteLine(shape);
+                }
+            }
+            Console.WriteLine("Shapes with letter 'a' in the name are written to the file.txt.");
+
+            shapes.RemoveAll(s => s.Perimeter() < 5);
+
+            Console.WriteLine("Shapes with perimeter greater than and equal to 5:");
+            foreach (Shape shape in shapes)
+            {
+                Console.WriteLine(shape);
+            }
+
+        }
+    }
+}
